@@ -7,6 +7,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -23,6 +25,8 @@ import java.io.OutputStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class UploadTester {
+	
+	Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private UploadService uploadService;
@@ -30,7 +34,7 @@ public class UploadTester {
     @Test
     @SneakyThrows
     public void testHandleFileUpload() {
-
+    	
         File file = new File("upload.txt");
         DiskFileItem fileItem = (DiskFileItem) new DiskFileItemFactory().createItem("file",
                 MediaType.TEXT_PLAIN_VALUE, true, file.getName());
@@ -42,8 +46,9 @@ public class UploadTester {
         }
 
         MultipartFile multi = new CommonsMultipartFile(fileItem);
-
-        log.info(uploadService.handleFileUpload(multi));
+        String handleFileUpload = uploadService.handleFileUpload(multi);
+        System.err.println(handleFileUpload);
+        log.info(handleFileUpload);
     }
 
 }
